@@ -4,7 +4,11 @@
 
 Ejecute el comando `npm install`
 
-> Node js
-> Express
-> Cors
-> dontenv
+Dependencias usadas:
+
+> bcryptjs,
+> cors,
+> dotenv
+> express
+> express-validator
+> mongoose

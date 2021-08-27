@@ -2,6 +2,7 @@
 
 const express = require("express");
 const cors = require("cors");
+const { dbConnection } = require("../database/config");
 
 class Server {
   //Inicialización
@@ -13,11 +14,17 @@ class Server {
     //Rutas Middleware
     this.usuariosPath = "/api/usuarios";
 
+    //Conectar a la base de datos
+    this.conectarDB();
     //Middlewares
     this.middlewares();
 
     //Llamar rutas app
     this.routes();
+  }
+
+  async conectarDB() {
+    await dbConnection();
   }
 
   //Middlewares
@@ -32,17 +39,17 @@ class Server {
     this.app.use(express.static("public"));
   }
 
-  //Rutas
-  routes() {
-    //requerir mis rutas
-    this.app.use(this.usuariosPath, require("../routes/usuarios"));
-  }
-
   //Correr app
   listen() {
     this.app.listen(this.port, () => {
       console.log(`URL::: http://localhost:${this.port}`);
     });
+  }
+
+  //Rutas
+  routes() {
+    //requerir mis rutas
+    this.app.use(this.usuariosPath, require("../routes/usuarios"));
   }
 }
 
