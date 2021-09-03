@@ -1,17 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <link rel="stylesheet" href="./css/style.css">
-    <title>Express</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="google-signin-client_id"
+    content="912351047446-jn7aap52bsved6lof5oukrj1476fprmm.apps.googleusercontent.com">
+  <link rel="stylesheet" href="./css/style.css">
+  <title>Express</title>
 </head>
+
 <body>
-    <div id="main">
-    	<div class="fof">
-        		<h1>Express - Node JS</h1>
-    	</div>
-</div>
+  <div id="main">
+    <div class="fof">
+      <h1>Express - Node JS</h1>
+    </div>
+    <div class="g-signin2 fof" data-onsuccess="onSignIn"> </div>
+    <a href="#" class="fof" onclick="signOut();">Sign out</a>
+  </div>
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
+
+  <script>
+    const url = window.location.hostname.includes('localhost') ?
+      'http://localhost:8081/api/auth/google' :
+      'https://restsnode.herokuapp.com/api/auth/google';
+
+    function onSignIn(googleUser) {
+      var profile = googleUser.getBasicProfile();
+      console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+      console.log('Name: ' + profile.getName());
+      console.log('Image URL: ' + profile.getImageUrl());
+      console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+
+      var id_token = googleUser.getAuthResponse().id_token;
+      const data = {id_token};
+      fetch(url, {
+        method:'POST',
+        headers:{'Content-Type': 'application/json'},
+        body:JSON.stringify(data),
+      }).then(resp => resp.json())
+      .then(data => console.log('SERVER', data))
+      .catch(err => console.log(err))
+
+    }
+
+    function signOut() {
+      var auth2 = gapi.auth2.getAuthInstance();
+      auth2.signOut().then(function () {
+        console.log('User signed out.');
+      });
+    }
+
+  </script>
 </body>
+
 </html>
