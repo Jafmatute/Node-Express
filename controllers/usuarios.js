@@ -1,7 +1,7 @@
 /** @format */
 const { response, request } = require("express");
 const bcryptjs = require("bcryptjs");
-const Usuario = require("../models/usuario");
+const { Usuario } = require("../models/");
 //Callback usuarios
 
 const usuariosGet = async (req = request, res = response) => {
